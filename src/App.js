@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import JoblyApi from "./api";
-import NavBar from "./NavBar";
-import Routes from "./Routes";
-import jwtDecode from "jwt-decode";
+import NavBar from "./components/NavBar";
+import Routes from "./components/Routes";
+import {jwtDecode} from "jwt-decode";
 
 function App() {
   const [user, setUser] = useState(null);
