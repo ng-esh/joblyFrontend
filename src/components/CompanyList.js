@@ -12,7 +12,7 @@ function CompanyList() {
       setCompanies(companies);
     }
     fetchCompanies();
-  }, [searchTerm]); // 🔍 Re-fetch companies when search term changes
+  }, [searchTerm]); // 🔍 Fetches new data when searchTerm changes
 
   function handleSearch(evt) {
     setSearchTerm(evt.target.value);
@@ -27,11 +27,14 @@ function CompanyList() {
         value={searchTerm}
         onChange={handleSearch}
       />
-      {companies.map(company => (
-        <CompanyCard key={company.handle} company={company} />
-      ))}
+      {companies.length ? (
+        companies.map(company => <CompanyCard key={company.handle} company={company} />)
+      ) : (
+        <p>No companies found.</p>
+      )}
     </div>
   );
 }
+
 
 export default CompanyList;
