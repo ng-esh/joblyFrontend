@@ -4,7 +4,7 @@ import CompanyList from "./CompanyList";
 import CompanyDetail from "./CompanyDetail";
 import JobList from "./JobList";
 import LoginForm from "./LoginForm";
-import SignupForm from "./SignupForm";
+import SignupForm from "./SignUpForm";
 import ProfileForm from "./ProfileForm";
 import PrivateRoute from "./PrivateRoute";
 

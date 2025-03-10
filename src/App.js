@@ -5,7 +5,7 @@ import NavBar from "./components/NavBar";
 import Routes from "./components/Routes";
 import { jwtDecode } from "jwt-decode";
 import UserContext from "./UserContext";
-import useLocalStorage from "./useLocalStorage";
+import useLocalStorage from "./UseLocalStorage";
 
 function App() {
   const [token, setToken] = useLocalStorage("jobly-token", null);
