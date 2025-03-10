@@ -19,7 +19,8 @@ function AppRoutes({ login, signup }) {
       <Route path="/companies" element={<PrivateRoute><CompanyList /></PrivateRoute>} />
       <Route path="/companies/:handle" element={<PrivateRoute><CompanyDetail /></PrivateRoute>} />
       <Route path="/jobs" element={<PrivateRoute><JobList /></PrivateRoute>} />
-      <Route path="/profile" element={<PrivateRoute><ProfileForm /></PrivateRoute>} />
+      <Route path="/profile" element={<PrivateRoute><ProfileForm updateUser={updateUser} /></PrivateRoute>} />
+
 
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

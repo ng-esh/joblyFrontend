@@ -56,6 +56,17 @@ function App() {
     }
   }
 
+  async function updateUser(username, newData) {
+    try {
+      let updatedUser = await JoblyApi.updateUser(username, newData);
+      setCurrentUser(updatedUser); // ✅ Updates global state so UI reflects changes
+      return true;
+    } catch (err) {
+      console.error("Update failed:", err);
+      return false;
+    }
+  }
+
   /** Handle user logout */
   function logout() {
     setCurrentUser(null);
@@ -67,7 +78,7 @@ function App() {
     <UserContext.Provider value={{ currentUser }}>
       <BrowserRouter>
         <NavBar logout={logout} />
-        <Routes login={login} signup={signup} />
+        <Routes login={login} signup={signup} updateUser = {updateUser}/>
       </BrowserRouter>
     </UserContext.Provider>
   );
