@@ -1,13 +1,19 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import UserContext from "./UserContext";
 
-function NavBar({ user, logout }) {
+function NavBar({ logout }) {
+  const { currentUser } = useContext(UserContext);
+
   return (
     <nav>
       <Link to="/">Home</Link>
       <Link to="/companies">Companies</Link>
       <Link to="/jobs">Jobs</Link>
-      {user ? (
+
+      {currentUser ? (
         <>
+          <span>Welcome, {currentUser.username}!</span>
           <Link to="/profile">Profile</Link>
           <Link to="/" onClick={logout}>Logout</Link>
         </>
