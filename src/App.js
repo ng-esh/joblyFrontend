@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import JoblyApi from "./api";
-import NavBar from "./components/NavBar";
-import Routes from "./components/Routes";
+import NavBar from "./NavBar";
+import Routes from "./Routes";
 import { jwtDecode } from "jwt-decode";
 import UserContext from "./UserContext";
+import useLocalStorage from "./useLocalStorage";
 
 function App() {
+  const [token, setToken] = useLocalStorage("jobly-token");
   const [currentUser, setCurrentUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("jobly-token") || null);
 
-  // Load user info when token changes
   useEffect(() => {
     async function fetchUser() {
       if (token) {
@@ -34,11 +34,9 @@ function App() {
   async function login(loginData) {
     try {
       let newToken = await JoblyApi.login(loginData);
-      setToken(newToken);
-      localStorage.setItem("jobly-token", newToken);
+      setToken(newToken); // ✅ Automatically saves token in localStorage
       return { success: true };
     } catch (errors) {
-      console.error("Login failed", errors);
       return { success: false, errors };
     }
   }
@@ -48,10 +46,8 @@ function App() {
     try {
       let newToken = await JoblyApi.signup(signupData);
       setToken(newToken);
-      localStorage.setItem("jobly-token", newToken);
       return { success: true };
     } catch (errors) {
-      console.error("Signup failed", errors);
       return { success: false, errors };
     }
   }
@@ -59,8 +55,7 @@ function App() {
   /** Handle user logout */
   function logout() {
     setCurrentUser(null);
-    setToken(null);
-    localStorage.removeItem("jobly-token");
+    setToken(null); // ✅ Removes token from localStorage
   }
 
   return (
