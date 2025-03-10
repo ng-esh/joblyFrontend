@@ -3,10 +3,11 @@ import { BrowserRouter } from "react-router-dom";
 import JoblyApi from "./api";
 import NavBar from "./components/NavBar";
 import Routes from "./components/Routes";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+import UserContext from "./UserContext";
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("jobly-token") || null);
 
   // Load user info when token changes
@@ -17,13 +18,13 @@ function App() {
         try {
           let { username } = jwtDecode(token);
           let user = await JoblyApi.getUser(username);
-          setUser(user);
+          setCurrentUser(user);
         } catch (err) {
           console.error("Failed to fetch user", err);
-          setUser(null);
+          setCurrentUser(null);
         }
       } else {
-        setUser(null);
+        setCurrentUser(null);
       }
     }
     fetchUser();
@@ -57,16 +58,18 @@ function App() {
 
   /** Handle user logout */
   function logout() {
-    setUser(null);
+    setCurrentUser(null);
     setToken(null);
     localStorage.removeItem("jobly-token");
   }
 
   return (
-    <BrowserRouter>
-      <NavBar user={user} logout={logout} />
-      <Routes login={login} signup={signup} user={user} />
-    </BrowserRouter>
+    <UserContext.Provider value={{ currentUser }}>
+      <BrowserRouter>
+        <NavBar logout={logout} />
+        <Routes login={login} signup={signup} />
+      </BrowserRouter>
+    </UserContext.Provider>
   );
 }
 
