@@ -69,16 +69,24 @@ function App() {
 
   async function applyToJob(jobId) {
     try {
+      if (!currentUser) {
+        console.error("No user is logged in. Cannot apply to job.");
+        return;
+      }
+  
       await JoblyApi.applyToJob(currentUser.username, jobId);
   
       setCurrentUser(curr => ({
         ...curr,
-        applications: [...curr.applications, jobId], // ✅ Add the applied job to currentUser
+        applications: [...(curr.applications || []), jobId], // ✅ Ensure applications is always an array
       }));
+  
+      console.log(`Applied to job ${jobId}`);
     } catch (err) {
       console.error("Error applying to job:", err);
     }
   }
+  
 
   /** Handle user logout */
   function logout() {

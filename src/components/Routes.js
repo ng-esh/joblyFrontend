@@ -8,7 +8,7 @@ import SignupForm from "./SignUpForm";
 import ProfileForm from "./ProfileForm";
 import PrivateRoute from "./PrivateRoute";
 
-function AppRoutes({ login, signup, updateUser }) {
+function AppRoutes({ login, signup, updateUser, applyToJob }) {
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
@@ -17,8 +17,8 @@ function AppRoutes({ login, signup, updateUser }) {
 
       {/* 🔐 Protected Routes Require Authentication */}
       <Route path="/companies" element={<PrivateRoute><CompanyList /></PrivateRoute>} />
-      <Route path="/companies/:handle" element={<PrivateRoute><CompanyDetail /></PrivateRoute>} />
-      <Route path="/jobs" element={<PrivateRoute><JobList /></PrivateRoute>} />
+      <Route path="/companies/:handle" element={<PrivateRoute><CompanyDetail applyToJob={applyToJob} /></PrivateRoute>} />
+      <Route path="/jobs" element={<PrivateRoute><JobList applyToJob={applyToJob} /></PrivateRoute>} />
       <Route path="/profile" element={<PrivateRoute><ProfileForm updateUser={updateUser} /></PrivateRoute>} />
 
 
