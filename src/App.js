@@ -67,6 +67,19 @@ function App() {
     }
   }
 
+  async function applyToJob(jobId) {
+    try {
+      await JoblyApi.applyToJob(currentUser.username, jobId);
+  
+      setCurrentUser(curr => ({
+        ...curr,
+        applications: [...curr.applications, jobId], // ✅ Add the applied job to currentUser
+      }));
+    } catch (err) {
+      console.error("Error applying to job:", err);
+    }
+  }
+
   /** Handle user logout */
   function logout() {
     setCurrentUser(null);
@@ -78,7 +91,8 @@ function App() {
     <UserContext.Provider value={{ currentUser }}>
       <BrowserRouter>
         <NavBar logout={logout} />
-        <Routes login={login} signup={signup} updateUser = {updateUser}/>
+        <Routes login={login} signup={signup} updateUser={updateUser} applyToJob={applyToJob} />
+
       </BrowserRouter>
     </UserContext.Provider>
   );
