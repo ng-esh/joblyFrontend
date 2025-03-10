@@ -9,8 +9,13 @@ function CompanyDetail() {
 
   useEffect(() => {
     async function fetchCompany() {
-      let companyData = await JoblyApi.getCompany(handle);
-      setCompany(companyData);
+      try {
+        let companyData = await JoblyApi.getCompany(handle);
+        setCompany(companyData);
+      } catch (err) {
+        console.error("Company not found:", err);
+        setCompany(null);
+      }
     }
     fetchCompany();
   }, [handle]);
@@ -22,9 +27,11 @@ function CompanyDetail() {
       <h2>{company.name}</h2>
       <p>{company.description}</p>
       <h3>Jobs at {company.name}</h3>
-      {company.jobs.map(job => (
-        <JobCard key={job.id} job={job} />
-      ))}
+      {company.jobs.length ? (
+        company.jobs.map(job => <JobCard key={job.id} job={job} />)
+      ) : (
+        <p>No jobs available at this company.</p>
+      )}
     </div>
   );
 }
