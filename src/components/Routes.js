@@ -8,7 +8,7 @@ import SignupForm from "./SignUpForm";
 import ProfileForm from "./ProfileForm";
 import PrivateRoute from "./PrivateRoute";
 
-function AppRoutes({ login, signup }) {
+function AppRoutes({ login, signup, updateUser }) {
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
