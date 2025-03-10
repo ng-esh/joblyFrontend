@@ -1,24 +1,17 @@
-import { useState, useEffect } from "react";
-import JoblyApi from "../api";
+import { useState, useContext } from "react";
+import UserContext from "../UserContext";
 
-function ProfileForm({ username }) {
+function ProfileForm({ updateUser }) {
+  const { currentUser } = useContext(UserContext);
+
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
+    firstName: currentUser?.firstName || "",
+    lastName: currentUser?.lastName || "",
+    email: currentUser?.email || "",
   });
 
-  useEffect(() => {
-    async function fetchUser() {
-      let user = await JoblyApi.getUser(username);
-      setFormData({
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        email: user.email || "",
-      });
-    }
-    fetchUser();
-  }, [username]);
+  const [success, setSuccess] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   function handleChange(evt) {
     const { name, value } = evt.target;
@@ -27,17 +20,28 @@ function ProfileForm({ username }) {
 
   async function handleSubmit(evt) {
     evt.preventDefault();
-    await JoblyApi.updateUser(username, formData);
-    alert("Profile updated successfully!");
+    try {
+      await updateUser(currentUser.username, formData);
+      setSuccess(true);
+      setErrors([]);
+    } catch (err) {
+      setErrors(err);
+      setSuccess(false);
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name" />
-      <input name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name" />
-      <input name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
-      <button>Update Profile</button>
-    </form>
+    <div>
+      <h2>Edit Profile</h2>
+      <form onSubmit={handleSubmit}>
+        <input name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name" />
+        <input name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name" />
+        <input name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
+        <button type="submit">Save Changes</button>
+      </form>
+      {success && <p style={{ color: "green" }}>Profile updated successfully!</p>}
+      {errors.length > 0 && <p style={{ color: "red" }}>{errors.join(", ")}</p>}
+    </div>
   );
 }
 
