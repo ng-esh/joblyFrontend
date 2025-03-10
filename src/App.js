@@ -19,7 +19,13 @@ function App() {
         try {
           let { username } = jwtDecode(token);
           let user = await JoblyApi.getUser(username);
-          setCurrentUser(user);
+      
+          // ✅ Ensure applications are correctly set in user state
+          setCurrentUser({
+            ...user,
+            applications: user.applications || []  // Ensure applications is always an array
+          });
+
         } catch (err) {
           console.error("Failed to fetch user", err);
           setCurrentUser(null);
@@ -67,6 +73,10 @@ function App() {
 
   async function applyToJob(jobId) {
     try {
+      if (!currentUser) {
+        console.error("No user is logged in. Cannot apply to job.");
+        return;
+      }
       await JoblyApi.applyToJob(currentUser.username, jobId);
   
       setCurrentUser(curr => ({

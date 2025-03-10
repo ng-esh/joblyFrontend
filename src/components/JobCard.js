@@ -1,16 +1,15 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import UserContext from "../UserContext";
 
 
 function JobCard({ job, applyToJob }) {
   const { currentUser } = useContext(UserContext);
   const hasApplied = currentUser?.applications?.includes(job.id); // ✅ Check if the user has already applied
-  const [applied, setApplied] = useState(hasApplied);
+  
 
   async function handleApply() {
-    if (applied) return;
+    if (hasApplied) return;
     await applyToJob(job.id);
-    setApplied(true);
   }
 
   return (
@@ -19,8 +18,8 @@ function JobCard({ job, applyToJob }) {
       {job.companyName && <p>Company: {job.companyName}</p>}
       <p>Salary: {job.salary ? `$${job.salary.toLocaleString()}` : "N/A"}</p>
       <p>Equity: {job.equity || "N/A"}</p>
-      <button onClick={handleApply} disabled={applied}>
-        {applied ? "Applied" : "Apply"}
+      <button onClick={handleApply} disabled={hasApplied}>
+        {hasApplied ? "Applied" : "Apply"}
       </button>
     </div>
   );
