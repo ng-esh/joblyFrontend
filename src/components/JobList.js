@@ -5,31 +5,53 @@ import JobCard from "./JobCard";
 function JobList() {
   const [jobs, setJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    async function fetchJobs() {
+    searchJobs();
+  }, []); // Fetch jobs on mount
+
+  async function searchJobs() {
+    setLoading(true);
+    try {
       let jobs = await JoblyApi.getJobs(searchTerm);
       setJobs(jobs);
+    } catch (err) {
+      console.error("Error fetching jobs:", err);
+      setJobs([]);
     }
-    fetchJobs();
-  }, [searchTerm]); // 🔍 Re-fetch jobs when search term changes
+    setLoading(false);
+  }
 
-  function handleSearch(evt) {
+  function handleChange(evt) {
     setSearchTerm(evt.target.value);
+  }
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    searchJobs();
   }
 
   return (
     <div>
       <h2>Jobs</h2>
-      <input
-        type="text"
-        placeholder="Search jobs..."
-        value={searchTerm}
-        onChange={handleSearch}
-      />
-      {jobs.map(job => (
-        <JobCard key={job.id} job={job} />
-      ))}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Search jobs..."
+          value={searchTerm}
+          onChange={handleChange}
+        />
+        <button type="submit">Search</button>
+      </form>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : jobs.length ? (
+        jobs.map(job => <JobCard key={job.id} job={job} />)
+      ) : (
+        <p>No jobs found.</p>
+      )}
     </div>
   );
 }
