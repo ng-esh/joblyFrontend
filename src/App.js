@@ -10,6 +10,7 @@ import useLocalStorage from "./UseLocalStorage";
 function App() {
   const [token, setToken] = useLocalStorage("jobly-token", null);
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchUser() {
@@ -26,19 +27,16 @@ function App() {
       } else {
         setCurrentUser(null);
       }
+      setLoading(false); // ✅ Done loading, allow app to render
     }
     fetchUser();
   }, [token]);
 
   /** Handle user login */
-  async function login(loginData, rememberMe) {
+  async function login(loginData, ) {
     try {
       let newToken = await JoblyApi.login(loginData);
-      if (rememberMe) {
-        setToken(newToken); // ✅ Save in localStorage if "Remember Me" is checked
-      } else {
-        sessionStorage.setItem("jobly-token", newToken); // ✅ Otherwise, use sessionStorage
-      }
+      setToken(newToken); // ✅ Save in localStorage if "Remember Me" is checked
       return { success: true };
     } catch (errors) {
       return { success: false, errors };
@@ -69,11 +67,6 @@ function App() {
 
   async function applyToJob(jobId) {
     try {
-      if (!currentUser) {
-        console.error("No user is logged in. Cannot apply to job.");
-        return;
-      }
-  
       await JoblyApi.applyToJob(currentUser.username, jobId);
   
       setCurrentUser(curr => ({
@@ -94,6 +87,9 @@ function App() {
     setToken(null);
     sessionStorage.removeItem("jobly-token"); // ✅ Remove session token on logout
   }
+
+  if (loading) return <p>Loading...</p>; // ✅ Prevent flashing the login page on refresh
+
 
   return (
     <UserContext.Provider value={{ currentUser }}>
