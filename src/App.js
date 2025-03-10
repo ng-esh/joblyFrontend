@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import JoblyApi from "./api";
-import NavBar from "./NavBar";
-import Routes from "./Routes";
+import NavBar from "./components/NavBar";
+import Routes from "./components/Routes";
 import { jwtDecode } from "jwt-decode";
 import UserContext from "./UserContext";
 import useLocalStorage from "./useLocalStorage";
 
 function App() {
-  const [token, setToken] = useLocalStorage("jobly-token");
+  const [token, setToken] = useLocalStorage("jobly-token", null);
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -31,10 +31,14 @@ function App() {
   }, [token]);
 
   /** Handle user login */
-  async function login(loginData) {
+  async function login(loginData, rememberMe) {
     try {
       let newToken = await JoblyApi.login(loginData);
-      setToken(newToken); // ✅ Automatically saves token in localStorage
+      if (rememberMe) {
+        setToken(newToken); // ✅ Save in localStorage if "Remember Me" is checked
+      } else {
+        sessionStorage.setItem("jobly-token", newToken); // ✅ Otherwise, use sessionStorage
+      }
       return { success: true };
     } catch (errors) {
       return { success: false, errors };
@@ -55,7 +59,8 @@ function App() {
   /** Handle user logout */
   function logout() {
     setCurrentUser(null);
-    setToken(null); // ✅ Removes token from localStorage
+    setToken(null);
+    sessionStorage.removeItem("jobly-token"); // ✅ Remove session token on logout
   }
 
   return (
