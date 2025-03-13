@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback} from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useNavigate } from "react-router-dom";
 import JoblyApi from "./api";
 import NavBar from "./components/NavBar";
 import Routes from "./components/Routes";
@@ -14,6 +14,7 @@ function App() {
   const [token, setToken] = useLocalStorage("jobly-token", null);
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   /** ✅ Define `fetchUser` globally using `useCallback()` */
   const fetchUser = useCallback(async () => {
