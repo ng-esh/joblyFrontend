@@ -29,13 +29,16 @@ function App() {
     try {
       let { username } = jwtDecode(token);
       let user = await JoblyApi.getUser(username);
+
+      console.log("🔍 Fetching user from API:", user); 
      
       setCurrentUser({
         ...user,
-        applications: [], // 🔄 **RESET applied jobs on refresh**
+        applications: new Set (user.applications || [] ), // 🔄 **RESET applied jobs on refresh**
       });
   
     } catch (err) {
+      console.error("❌ Error fetching user:", err);
       setCurrentUser(null);
     }
     setLoading(false);
@@ -52,11 +55,20 @@ function App() {
       let newToken = await JoblyApi.login(loginData);
       setToken(newToken);
       await fetchUser(); // ✅ Call fetchUser after login to update user state
+      console.log("👤 currentUser after login:", currentUser); // ✅ Debugging log
       return { success: true };
     } catch (errors) {
       return { success: false, errors };
     }
   }
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log("✅ Redirecting after login:", currentUser);
+      navigate("/dashboard");  // ✅ Ensure this only runs when `currentUser` exists
+    }
+  }, [currentUser]); // ✅ Runs when `currentUser` updates
+  
 
   /** Handle user signup */
   async function signup(signupData) {
