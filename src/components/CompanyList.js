@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import JoblyApi from "../api";
 import CompanyCard from "./CompanyCard";
+import "../styles/CompanyList.css"
 
 function CompanyList() {
   const [companies, setCompanies] = useState([]);
@@ -26,8 +27,9 @@ function CompanyList() {
   }
 
   return (
-    <div>
+    <div className="container">
       <h2>Companies</h2>
+      <div className="company-list">
       <input
         type="text"
         placeholder="Search companies..."
@@ -42,6 +44,7 @@ function CompanyList() {
         <p>No companies found.</p>
       )}
     </div>
+  </div>
   );
 }
 

@@ -6,6 +6,9 @@ import Routes from "./components/Routes";
 import { jwtDecode } from "jwt-decode";
 import UserContext from "./UserContext";
 import useLocalStorage from "./UseLocalStorage";
+import "./App.css";
+
+
 
 function App() {
   const [token, setToken] = useLocalStorage("jobly-token", null);

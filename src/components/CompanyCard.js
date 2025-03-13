@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
+import "../styles/CompanyCard.css"
 
 function CompanyCard({ company }) {
   return (
-    <div>
-      <h4>
-        <Link to={`/companies/${company.handle}`}>{company.name}</Link>
-      </h4>
-      <p>{company.description}</p>
-    </div>
+    <div className="company-card">
+    <h3>
+      <Link to={`/companies/${company.handle}`}>{company.name}</Link>
+    </h3>
+    <p>{company.description}</p>
+  </div>
   );
 }
 

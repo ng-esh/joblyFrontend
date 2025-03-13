@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import UserContext from "../UserContext";
+import "../styles/ProfileForm.css"
 
 function ProfileForm({ updateUser }) {
   const { currentUser} = useContext(UserContext);
@@ -49,19 +50,53 @@ function ProfileForm({ updateUser }) {
   }
 
   return (
-    <div>
+    <div className="profile-form">
       <h2>Edit Profile</h2>
       {loading ? <p>Loading profile...</p> : <p>Welcome, {currentUser.firstName}!</p>}
       <form onSubmit={handleSubmit}>
-        <input name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name" />
-        <input name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name" />
-        <input name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
+        <div className="form-group">
+          <label htmlFor="firstName">First Name</label>
+          <input
+            id="firstName"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            placeholder="First Name"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="lastName">Last Name</label>
+          <input
+            id="lastName"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            placeholder="Last Name"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email"
+          />
+        </div>
+
         <button type="submit">Save Changes</button>
       </form>
-      {success && <p style={{ color: "green" }}>Profile updated successfully!</p>}
-      {errors.length > 0 && <p style={{ color: "red" }}>{errors.join(", ")}</p>}
+
+      {success && <p className="success-message">Profile updated successfully!</p>}
+      {errors.length > 0 && <p className="error-message">{errors.join(", ")}</p>}
     </div>
   );
+
+
+  
 }
 
 export default ProfileForm;

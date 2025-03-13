@@ -38,4 +38,10 @@
   .signup-form button:hover {
     background: #e63946;
   }
+
+  .error-message {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+  }
   

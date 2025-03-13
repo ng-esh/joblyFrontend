@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/LoginForm.css"; 
 
 function LoginForm({ login }) {
   const [formData, setFormData] = useState({ username: "", password: "" });
@@ -20,16 +21,38 @@ function LoginForm({ login }) {
       setErrors(result.errors);
     }
   }
-
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="username" value={formData.username} onChange={handleChange} placeholder="Username" />
-      <input name="password" type="password" value={formData.password} onChange={handleChange} placeholder="Password" />
-  
-      <button>Login</button>
-      {errors.length > 0 && <p>{errors.join(", ")}</p>}
+    <form className="login-form" onSubmit={handleSubmit}>
+      <h2>Login</h2>
+      <div className="form-group">
+        <label htmlFor="username">Username</label>
+        <input
+          id="username"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          placeholder="Username"
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+        />
+      </div>
+
+      <button type="submit">Login</button>
+
+      {errors.length > 0 && <p className="error-message">{errors.join(", ")}</p>}
     </form>
   );
+  
 }
 
 export default LoginForm;

@@ -3,25 +3,34 @@
     padding: 60px 20px;
     background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
     color: white;
-  }
-  
-  .homepage h1 {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.homepage h1 {
     font-size: 42px;
     margin-bottom: 10px;
-  }
-  
-  .homepage p {
+}
+
+.homepage p {
     font-size: 18px;
     margin-bottom: 20px;
-  }
-  
-  .homepage button {
+}
+
+.homepage-btn {
     font-size: 20px;
     padding: 12px 20px;
     background: var(--accent-color);
-  }
-  
-  .homepage button:hover {
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.homepage-btn:hover {
     background: #e63946;
-  }
-  
+}

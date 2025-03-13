@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import UserContext from "../UserContext";
+import "../styles/JobCard.css"
 
 function JobCard({ job, applyToJob }) {
   const { currentUser } = useContext(UserContext);
@@ -14,15 +15,17 @@ function JobCard({ job, applyToJob }) {
   }
 
   return (
-    <div style={{ border: "1px solid #ddd", padding: "10px", marginBottom: "10px" }}>
-      <h4>{job.title}</h4>
+    <div className="job-card">
+    <div className="job-card-details">
+      <h3>{job.title}</h3>
       {job.companyName && <p>Company: {job.companyName}</p>}
       <p>Salary: {job.salary ? `$${job.salary.toLocaleString()}` : "N/A"}</p>
       <p>Equity: {job.equity || "N/A"}</p>
-      <button onClick={handleApply} disabled={hasApplied}>
-        {hasApplied ? "Applied" : "Apply"}
-      </button>
     </div>
+    <button onClick={handleApply} disabled={hasApplied}>
+      {hasApplied ? "Applied" : "Apply"}
+    </button>
+  </div>
   );
 }
 

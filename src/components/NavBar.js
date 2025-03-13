@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../UserContext";
+import "../styles/Navbar.css"
 
 function NavBar({ logout }) {
   const { currentUser } = useContext(UserContext);
@@ -12,23 +13,25 @@ function NavBar({ logout }) {
   }
 
   return (
-    <nav>
-      <Link to="/">Home</Link>
-      <Link to="/companies">Companies</Link>
-      <Link to="/jobs">Jobs</Link>
+    <nav className="navbar">
+      <ul className="nav-links">
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/companies">Companies</Link></li>
+        <li><Link to="/jobs">Jobs</Link></li>
 
-      {currentUser ? (
-        <>
-          <span>Welcome, {currentUser.username}!</span>
-          <Link to="/profile">Profile</Link>
-          <button onClick={() => setShowModal(true)}>Logout</button>
-        </>
-      ) : (
-        <>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </>
-      )}
+        {currentUser ? (
+          <>
+            <li><span>Welcome, {currentUser.username}!</span></li>
+            <li><Link to="/profile">Profile</Link></li>
+            <li><button onClick={() => setShowModal(true)}>Logout</button></li>
+          </>
+        ) : (
+          <>
+            <li><Link to="/login">Login</Link></li>
+            <li><Link to="/signup">Sign Up</Link></li>
+          </>
+        )}
+      </ul>
 
       {showModal && (
         <div className="modal">

@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useCallback } from "react";
 import JoblyApi from "../api";
 import JobCard from "./JobCard";
 import UserContext from "../UserContext";
+import "../styles/JobList.css"
 
 function JobList({ applyToJob }) {
   const [jobs, setJobs] = useState([]);
@@ -34,33 +35,37 @@ function JobList({ applyToJob }) {
     searchJobs();
   }
   return (
-    <div>
+    <div className="container"> 
       <h2>Jobs</h2>
-      {loading ? <p>Loading jobs...</p> : jobs.map(job => <JobCard key={job.id} job={job} applyToJob={applyToJob} />)}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Search jobs..."
-          value={searchTerm}
-          onChange={handleChange}
-        />
-        <button type="submit">Search</button>
-      </form>
+      <div className="job-list">
+        
+        {loading ? <p>Loading jobs...</p> : null}
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : jobs.length ? (
-        jobs.map(job => (
-          <JobCard
-            key={job.id}
-            job={job}
-            applyToJob={applyToJob}
-            applied={currentUser?.applications?.includes(job.id)}
+        <form onSubmit={handleSubmit} className="job-search-form">
+          <input
+            type="text"
+            placeholder="Search jobs..."
+            value={searchTerm}
+            onChange={handleChange}
           />
-        ))
-      ) : (
-        <p>No jobs found.</p>
-      )}
+          <button type="submit">Search</button>
+        </form>
+
+        {loading ? (
+          <p>Loading...</p>
+        ) : jobs.length ? (
+          jobs.map(job => (
+            <JobCard
+              key={job.id}
+              job={job}
+              applyToJob={applyToJob}
+              applied={currentUser?.applications?.includes(job.id)}
+            />
+          ))
+        ) : (
+          <p>No jobs found.</p>
+        )}
+      </div>
     </div>
   );
 }
