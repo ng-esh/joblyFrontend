@@ -80,27 +80,27 @@ class JoblyApi {
   }
 
   /** Apply to a job */
-  static async applyToJob(username, jobId) {
+  static async applyToJob(username, jobId, updateUserApplications) {
     try {
-      // ✅ Apply to the job without checking first (backend prevents duplicates)
       let res = await this.request(`users/${username}/jobs/${jobId}`, {}, "post");
   
-      // ✅ Ensure the frontend reflects the change instantly
-      if (currentUser) {
-        currentUser.applications = new Set ([...currentUser.applications, jobId]);
+      // ✅ Call the passed-in function to update applied jobs in React state
+      if (updateUserApplications) {
+        updateUserApplications(jobId);
       }
   
       console.log(`✅ Successfully applied to job ${jobId}`);
       return res.applied;
     } catch (err) {
       console.error(`❌ Error applying to job ${jobId}:`, err);
-      
+  
       // ✅ Handle "already applied" error
       if (err.response && err.response.status === 400) {
         alert("You have already applied to this job.");
       }
     }
   }
+  
   
   
   // --------------------

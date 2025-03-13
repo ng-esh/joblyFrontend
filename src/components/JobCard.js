@@ -5,13 +5,20 @@ import "../styles/JobCard.css"
 function JobCard({ job, applyToJob }) {
   const { currentUser } = useContext(UserContext);
 
+  if (!currentUser?.applications) {
+    currentUser.applications = new Set();
+  }
+
   // ✅ Ensure `applications` is always treated as numbers
-  // const appliedJobs = currentUser?.applications?.map(id => Number(id)) || [];
   const hasApplied = currentUser?.applications?.has(Number(job.id));
+
+  function updateUserApplications(jobId) {
+    currentUser.applications.add(jobId);
+  }
 
   async function handleApply() {
     if (hasApplied) return;
-    await applyToJob(currentUser.username, job.id, currentUser);
+    await applyToJob(currentUser.username, job.id, updateUserApplications);
   }
 
   return (
