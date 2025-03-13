@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback} from "react";
-import { BrowserRouter, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, useNavigate } from "react-router-dom";
 import JoblyApi from "./api";
 import NavBar from "./components/NavBar";
 import Routes from "./components/Routes";
@@ -7,8 +7,6 @@ import { jwtDecode } from "jwt-decode";
 import UserContext from "./UserContext";
 import useLocalStorage from "./UseLocalStorage";
 import "./App.css";
-
-
 
 function App() {
   const [token, setToken] = useLocalStorage("jobly-token", null);
@@ -18,7 +16,6 @@ function App() {
 
   /** ✅ Define `fetchUser` globally using `useCallback()` */
   const fetchUser = useCallback(async () => {
-  
     if (!token) {
       setCurrentUser(null);
       setLoading(false);
@@ -26,7 +23,6 @@ function App() {
     }
   
     JoblyApi.token = token;
-   
     try {
       let { username } = jwtDecode(token);
       let user = await JoblyApi.getUser(username);
@@ -37,7 +33,6 @@ function App() {
         ...user,
         applications: new Set (user.applications || [] ), // 🔄 **RESET applied jobs on refresh**
       });
-  
     } catch (err) {
       console.error("❌ Error fetching user:", err);
       setCurrentUser(null);
@@ -49,6 +44,13 @@ function App() {
    useEffect(() => {
     fetchUser();
   }, [fetchUser]); // ✅ Only runs when `fetchUser` changes
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log("✅ Redirecting after login:", currentUser);
+      navigate("/dashboard");  // ✅ Ensure this only runs when `currentUser` exists
+      }
+    }, [currentUser, navigate]); // ✅ Runs when `currentUser` updates
   
   /** Handle user login */
   async function login(loginData) {
@@ -62,15 +64,7 @@ function App() {
       return { success: false, errors };
     }
   }
-
-  useEffect(() => {
-    if (currentUser) {
-      console.log("✅ Redirecting after login:", currentUser);
-      navigate("/dashboard");  // ✅ Ensure this only runs when `currentUser` exists
-    }
-  }, [currentUser, navigate]); // ✅ Runs when `currentUser` updates
   
-
   /** Handle user signup */
   async function signup(signupData) {
     try {
@@ -92,7 +86,7 @@ function App() {
         // ✅ Immediately update applications in state
         setCurrentUser(prevUser => ({
             ...prevUser,
-            applications: [...prevUser.applications, jobId]
+            applications: new Set ([...prevUser.applications, jobId]),
         }));
     } catch (err) {
       console.error("❌ Error applying to job:", err); // Logs any errors
@@ -123,12 +117,12 @@ function App() {
   }
 
   return (
-    <UserContext.Provider value={{ currentUser }}>
-      <BrowserRouter>
-        <NavBar logout={logout} />
-        <Routes login={login} signup={signup} applyToJob={applyToJob} updateUser={updateUser} />
-      </BrowserRouter>
-    </UserContext.Provider>
+    <BrowserRouter>
+      <UserContext.Provider value={{ currentUser }}>
+          <NavBar logout={logout} />
+          <Routes login={login} signup={signup} applyToJob={applyToJob} updateUser={updateUser} />
+      </UserContext.Provider>
+    </BrowserRouter>
   );
 }
 
