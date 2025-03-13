@@ -11,7 +11,7 @@ function JobCard({ job, applyToJob }) {
 
   async function handleApply() {
     if (hasApplied) return;
-    await applyToJob(job.id);
+    await applyToJob(currentUser.username, job.id, currentUser);
   }
 
   return (

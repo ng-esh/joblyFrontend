@@ -87,7 +87,7 @@ class JoblyApi {
   
       // ✅ Ensure the frontend reflects the change instantly
       if (currentUser) {
-        currentUser.applications.add(jobId);
+        currentUser.applications = new Set ([...currentUser.applications, jobId]);
       }
   
       console.log(`✅ Successfully applied to job ${jobId}`);
