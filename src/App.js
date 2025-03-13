@@ -48,7 +48,7 @@ function AppRoutes() {
   useEffect(() => {
     if (currentUser) {
       console.log("✅ Redirecting after login:", currentUser);
-      navigate("/dashboard");  // ✅ Ensure this only runs when `currentUser` exists
+      navigate("/");  // ✅ Ensure this only runs when `currentUser` exists
       }
     }, [currentUser, navigate]); // ✅ Runs when `currentUser` updates
   
