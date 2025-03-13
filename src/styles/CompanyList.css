@@ -1,0 +1,11 @@
+.company-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+  }
+  
+  .company-list .company-card {
+    width: 100%;
+  }
+  
