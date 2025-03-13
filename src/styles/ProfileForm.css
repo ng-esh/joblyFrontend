@@ -1,0 +1,22 @@
+.profile-form {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-form h2 {
+    text-align: center;
+    color: var(--primary-color);
+  }
+  
+  .profile-form .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .profile-form button {
+    width: 100%;
+  }
+  
