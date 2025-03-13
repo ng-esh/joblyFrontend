@@ -8,7 +8,7 @@ import UserContext from "./UserContext";
 import useLocalStorage from "./UseLocalStorage";
 import "./App.css";
 
-function App() {
+function AppRoutes() {
   const [token, setToken] = useLocalStorage("jobly-token", null);
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -117,13 +117,21 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
       <UserContext.Provider value={{ currentUser }}>
           <NavBar logout={logout} />
           <Routes login={login} signup={signup} applyToJob={applyToJob} updateUser={updateUser} />
       </UserContext.Provider>
+  );
+}
+
+// ✅ Ensure `useNavigate()` is inside BrowserRouter
+function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   );
 }
+
 
 export default App;
