@@ -68,7 +68,7 @@ function App() {
       console.log("✅ Redirecting after login:", currentUser);
       navigate("/dashboard");  // ✅ Ensure this only runs when `currentUser` exists
     }
-  }, [currentUser]); // ✅ Runs when `currentUser` updates
+  }, [currentUser, navigate]); // ✅ Runs when `currentUser` updates
   
 
   /** Handle user signup */
