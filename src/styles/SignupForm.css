@@ -46,6 +46,11 @@
     font-size: 14px;
   }
 
+  .error-message li {
+    list-style-type: none;
+    margin-bottom: 5px;
+  }
+
   .input-error {
     border: 2px solid red;
     background-color: #ffe6e6;
