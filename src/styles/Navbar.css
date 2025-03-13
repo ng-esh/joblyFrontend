@@ -1,0 +1,23 @@
+.navbar {
+    background: var(--primary-color);
+    padding: 15px 0;
+  }
+  
+  .navbar .nav-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .navbar .nav-links a {
+    color: white;
+    font-weight: bold;
+    margin: 0 15px;
+  }
+  
+  .navbar .nav-links a:hover {
+    color: var(--secondary-color);
+  }
+  

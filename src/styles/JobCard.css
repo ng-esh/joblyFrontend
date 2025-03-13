@@ -1,0 +1,25 @@
+.job-card {
+    background: white;
+    border-left: 5px solid var(--secondary-color);
+    padding: 15px;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .job-card h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .job-card button {
+    background: var(--accent-color);
+  }
+  
+  .job-card button:hover {
+    background: #e63946;
+  }
+  
