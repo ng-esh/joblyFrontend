@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback} from "react";
-import { BrowserRouter, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, useNavigate } from "react-router-dom";
 import JoblyApi from "./api";
 import NavBar from "./components/NavBar";
 import Routes from "./components/Routes";
