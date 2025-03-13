@@ -1,0 +1,11 @@
+.job-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+  }
+  
+  .job-list .job-card {
+    width: 100%;
+  }
+  
