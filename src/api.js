@@ -110,16 +110,16 @@ class JoblyApi {
   /** Get user details */
   static async getUser(username) {
     let res = await this.request(`users/${username}`);
-    return res.data.user;
-  }
-
-  /** Update user details */
-  static async updateUser(username) {
-    let res = await this.request(`users/${username}`);
 
     if (!res.user) {
       throw new Error("User data not found in API response");
     }
+    return res.user;
+  }
+
+  /** Update user details */
+  static async updateUser(username, data ) {
+    let res = await this.request(`users/${username}`, data, "patch");
     return res.user;
   }
 
