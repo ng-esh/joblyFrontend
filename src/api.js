@@ -82,32 +82,27 @@ class JoblyApi {
   /** Apply to a job */
   static async applyToJob(username, jobId) {
     try {
-      // Fetch user applications first
-      let user = await this.request(`users/${username}`, {}, "get");
-      
-      if (!user.applications) {
-        console.warn(`⚠️ No applications found for user ${username}. Setting as empty array.`);
-        user.applications = []; // Prevents the TypeError
-      }
-
-      // Check if the job is already applied before deleting
-      if (user.applications.includes(jobId)) {
-        await this.request(`users/${username}/jobs/${jobId}`, {}, "delete");
-      }
-    } catch (err) {
-      console.warn(`⚠️ No existing application to delete or other issue:`, err);
-    }
-
-    // Apply to job after removing previous application
-    try {
+      // ✅ Apply to the job without checking first (backend prevents duplicates)
       let res = await this.request(`users/${username}/jobs/${jobId}`, {}, "post");
+  
+      // ✅ Ensure the frontend reflects the change instantly
+      if (currentUser) {
+        currentUser.applications.add(jobId);
+      }
+  
       console.log(`✅ Successfully applied to job ${jobId}`);
       return res.applied;
     } catch (err) {
       console.error(`❌ Error applying to job ${jobId}:`, err);
+      
+      // ✅ Handle "already applied" error
+      if (err.response && err.response.status === 400) {
+        alert("You have already applied to this job.");
+      }
     }
   }
-
+  
+  
   // --------------------
   // 👤 USER METHODS
   // --------------------
@@ -115,7 +110,7 @@ class JoblyApi {
   /** Get user details */
   static async getUser(username) {
     let res = await this.request(`users/${username}`);
-    return res.user;
+    return res.data.user;
   }
 
   /** Update user details */
@@ -140,50 +135,3 @@ JoblyApi.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
 
 
 export default JoblyApi;
-
-
-// import axios from "axios";
-
-// const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
-
-// class JoblyApi {
-//   static token = null; // 🔥 Token is no longer hardcoded, must be set dynamically
-
-//   /** Make an API request */
-//   static async request(endpoint, data = {}, method = "get") {
-//     console.log(`API Call: ${endpoint}`, data, method);
-
-//     const url = `${BASE_URL}/${endpoint}`;
-//     const headers = JoblyApi.token ? { Authorization: `Bearer ${JoblyApi.token}` } : {};
-
-//     try {
-//       const res = await axios({ url, method, data, headers });
-//       return res.data;
-//     } catch (err) {
-//       console.error("❌ API Error:", err.response?.data || err.message);
-//       throw err.response?.data?.error || ["API request failed"];
-//     }
-//   }
-
-//   /** Set token dynamically */
-//   static setToken(token) {
-//     JoblyApi.token = token;
-//   }
-
-//   /** Get user details */
-//   static async getUser(username) {
-//     return await this.request(`users/${username}`);
-//   }
-
-//   /** Apply to a job (Optimized) */
-//   static async applyToJob(username, jobId) {
-//     try {
-//       return await this.request(`users/${username}/jobs/${jobId}`, {}, "post");
-//     } catch (err) {
-//       console.error(`❌ Error applying to job ${jobId}:`, err);
-//       throw err;
-//     }
-//   }
-// }
-
-// export default JoblyApi;

@@ -6,8 +6,8 @@ function JobCard({ job, applyToJob }) {
   const { currentUser } = useContext(UserContext);
 
   // ✅ Ensure `applications` is always treated as numbers
-  const appliedJobs = currentUser?.applications?.map(id => Number(id)) || [];
-  const hasApplied = appliedJobs.includes(Number(job.id));
+  // const appliedJobs = currentUser?.applications?.map(id => Number(id)) || [];
+  const hasApplied = currentUser?.applications?.has(Number(job.id));
 
   async function handleApply() {
     if (hasApplied) return;

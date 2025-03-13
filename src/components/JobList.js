@@ -25,6 +25,22 @@ function JobList({ applyToJob }) {
   useEffect(() => {
     searchJobs();
   }, [searchJobs]);
+
+  useEffect(() => {
+    async function fetchUserApplications() {
+      try {
+        const user = await JoblyApi.getUser(currentUser.username);
+        currentUser.applications = new Set(user.applications);  // Ensure it's updated
+      } catch (err) {
+        console.error("Error fetching applied jobs:", err);
+      }
+    }
+  
+    if (currentUser) {
+      fetchUserApplications();
+    }
+  }, [currentUser]);  // Runs when `currentUser` changes
+  
   
   function handleChange(evt) {
     setSearchTerm(evt.target.value);
