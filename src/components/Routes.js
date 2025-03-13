@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Homepage from "./Homepage";
 import CompanyList from "./CompanyList";
@@ -7,20 +8,27 @@ import LoginForm from "./LoginForm";
 import SignupForm from "./SignUpForm";
 import ProfileForm from "./ProfileForm";
 import PrivateRoute from "./PrivateRoute";
+import UserContext from "../UserContext";
 
 function AppRoutes({ login, signup, updateUser, applyToJob }) {
+  const { currentUser } = useContext(UserContext);
+  
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
       <Route path="/login" element={<LoginForm login={login} />} />
       <Route path="/signup" element={<SignupForm signup={signup} />} />
 
-      {/* 🔐 Protected Routes Require Authentication */}
-      <Route path="/companies" element={<PrivateRoute><CompanyList /></PrivateRoute>} />
-      <Route path="/companies/:handle" element={<PrivateRoute><CompanyDetail applyToJob={applyToJob} /></PrivateRoute>} />
-      <Route path="/jobs" element={<PrivateRoute><JobList applyToJob={applyToJob} /></PrivateRoute>} />
-      <Route path="/profile" element={<PrivateRoute><ProfileForm updateUser={updateUser} /></PrivateRoute>} />
-
+      {/* 🔐 Debugging Logs for Protected Routes */}
+      {currentUser && (
+        <>
+          {console.log("🔐 Rendering protected routes...")}
+          <Route path="/companies" element={<PrivateRoute><CompanyList /></PrivateRoute>} />
+          <Route path="/companies/:handle" element={<PrivateRoute><CompanyDetail applyToJob={applyToJob} /></PrivateRoute>} />
+          <Route path="/jobs" element={<PrivateRoute><JobList applyToJob={applyToJob} /></PrivateRoute>} />
+          <Route path="/profile" element={<PrivateRoute><ProfileForm updateUser={updateUser} /></PrivateRoute>} />
+        </>
+      )}
 
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

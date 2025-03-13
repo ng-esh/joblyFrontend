@@ -16,16 +16,15 @@ function JobList({ applyToJob }) {
       let jobs = await JoblyApi.getJobs(searchTerm);
       setJobs(jobs);
     } catch (err) {
-      console.error("Error fetching jobs:", err);
       setJobs([]);
     }
     setLoading(false);
-  }, [searchTerm]); // ✅ Re-run when searchTerm changes
-
+  }, [searchTerm]);
+  
   useEffect(() => {
     searchJobs();
-  }, [searchJobs]); // ✅ Now React won't complain
-
+  }, [searchJobs]);
+  
   function handleChange(evt) {
     setSearchTerm(evt.target.value);
   }
@@ -34,10 +33,10 @@ function JobList({ applyToJob }) {
     evt.preventDefault();
     searchJobs();
   }
-
   return (
     <div>
       <h2>Jobs</h2>
+      {loading ? <p>Loading jobs...</p> : jobs.map(job => <JobCard key={job.id} job={job} applyToJob={applyToJob} />)}
       <form onSubmit={handleSubmit}>
         <input
           type="text"

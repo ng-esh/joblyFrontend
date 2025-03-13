@@ -1,11 +1,12 @@
 import { useContext } from "react";
 import UserContext from "../UserContext";
 
-
 function JobCard({ job, applyToJob }) {
   const { currentUser } = useContext(UserContext);
-  const hasApplied = currentUser?.applications?.includes(job.id); // ✅ Check if the user has already applied
-  
+
+  // ✅ Ensure `applications` is always treated as numbers
+  const appliedJobs = currentUser?.applications?.map(id => Number(id)) || [];
+  const hasApplied = appliedJobs.includes(Number(job.id));
 
   async function handleApply() {
     if (hasApplied) return;
