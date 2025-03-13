@@ -3,13 +3,25 @@ import { useNavigate } from "react-router-dom";
 import "../styles/SignupForm.css";
 
 function SignupForm({ signup }) {
-  const [formData, setFormData] = useState({ username: "", password: "", firstName: "", lastName: "", email: "" });
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+
   const [errors, setErrors] = useState([]);
+  const [usernameTaken, setUsernameTaken] = useState(false);
   const navigate = useNavigate();
 
   function handleChange(evt) {
     const { name, value } = evt.target;
     setFormData(fData => ({ ...fData, [name]: value }));
+
+    if (name === "username") {
+      setUsernameTaken(false); // Reset username error when user types
+    }
   }
 
   async function handleSubmit(evt) {
@@ -18,9 +30,19 @@ function SignupForm({ signup }) {
     if (result.success) {
       navigate("/");
     } else {
-      setErrors(result.errors);
+      const formattedErrors = result.errors.map(err =>
+        err.replace("instance.", "").replace("does not meet minimum length of", "must be at least")
+      );
+
+      setErrors(formattedErrors);
+
+      // Check if the username is taken
+      if (result.errors.some(err => err.toLowerCase().includes("username taken"))) {
+        setUsernameTaken(true);
+      }
     }
   }
+
   return (
     <form className="signup-form" onSubmit={handleSubmit}>
       <h2>Sign Up</h2>
@@ -33,7 +55,9 @@ function SignupForm({ signup }) {
           value={formData.username}
           onChange={handleChange}
           placeholder="Username"
+          className={usernameTaken ? "input-error" : ""}
         />
+        {usernameTaken && <p className="error-message">This username is already taken. Please choose another.</p>}
       </div>
 
       <div className="form-group">
@@ -83,11 +107,15 @@ function SignupForm({ signup }) {
 
       <button type="submit">Sign Up</button>
 
-      {errors.length > 0 && <p className="error-message">{errors.join(", ")}</p>}
+      {errors.length > 0 && (
+        <ul className="error-message">
+          {errors.map((err, idx) => (
+            <li key={idx}>{err}</li>
+          ))}
+        </ul>
+      )}
     </form>
   );
-
-  
 }
 
 export default SignupForm;
