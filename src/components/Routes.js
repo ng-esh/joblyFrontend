@@ -8,11 +8,8 @@ import LoginForm from "./LoginForm";
 import SignupForm from "./SignUpForm";
 import ProfileForm from "./ProfileForm";
 import PrivateRoute from "./PrivateRoute";
-import UserContext from "../UserContext";
 
 function AppRoutes({ login, signup, updateUser, applyToJob }) {
-  const { currentUser } = useContext(UserContext);
-  
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
@@ -20,16 +17,13 @@ function AppRoutes({ login, signup, updateUser, applyToJob }) {
       <Route path="/signup" element={<SignupForm signup={signup} />} />
 
       {/* 🔐 Debugging Logs for Protected Routes */}
-      {currentUser && (
-        <>
           {console.log("🔐 Rendering protected routes...")}
           <Route path="/companies" element={<PrivateRoute><CompanyList /></PrivateRoute>} />
           <Route path="/companies/:handle" element={<PrivateRoute><CompanyDetail applyToJob={applyToJob} /></PrivateRoute>} />
           <Route path="/jobs" element={<PrivateRoute><JobList applyToJob={applyToJob} /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><ProfileForm updateUser={updateUser} /></PrivateRoute>} />
-        </>
-      )}
-
+        
+      {/* Catch-All Route */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

@@ -46,7 +46,7 @@ function AppRoutes() {
   }, [fetchUser]); // ✅ Only runs when `fetchUser` changes
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && window.location.pathname === "/login") {
       console.log("✅ Redirecting after login:", currentUser);
       navigate("/");  // ✅ Ensure this only runs when `currentUser` exists
       }
