@@ -75,7 +75,7 @@ function JobList({ applyToJob }) {
               key={job.id}
               job={job}
               applyToJob={applyToJob}
-              applied={currentUser?.applications?.includes(job.id)}
+              applied={currentUser?.applications?.has(job.id)}
             />
           ))
         ) : (
